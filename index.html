@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nosso Casamento - Mural Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;600&family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #fffafb;
+      }
+      .font-serif {
+        font-family: "Italiana", serif;
+      }
+      .font-marker {
+        font-family: "Permanent+Marker", cursive;
+      }
+      .step {
+        display: none;
+      }
+      .step.active {
+        display: flex;
+      }
+
+      /* Loading spinner */
+      .spinner {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 3px solid #fff;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Estilo Scrapbook para o Mural */
+      .mural-container-bg {
+        background-image:
+          radial-gradient(#f1f1f1 1px, transparent 1px),
+          linear-gradient(to right, #f9f9f9 1px, transparent 1px),
+          linear-gradient(to bottom, #f9f9f9 1px, transparent 1px);
+        background-size: 20px 20px;
+        background-color: #fff;
+        border-radius: 2rem;
+        padding: 2rem;
+        min-height: 400px;
+      }
+
+      .polaroid {
+        background: white;
+        padding: 10px 10px 30px 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        transition: transform 0.3s ease;
+        max-width: 220px;
+        margin: 15px auto;
+      }
+
+      .polaroid:hover {
+        transform: scale(1.05) rotate(0deg) !important;
+        z-index: 50;
+      }
+
+      /* Efeito de Fita Adesiva */
+      .tape {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-2deg);
+        width: 80px;
+        height: 25px;
+        background-color: rgba(243, 225, 171, 0.6);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+      }
+
+      .mural-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        align-items: start;
+      }
+    </style>
+  </head>
+  <body
+    class="flex justify-center min-h-screen items-start sm:items-center p-4"
+  >
+    <!-- CONTAINER PRINCIPAL -->
+    <div
+      id="main-container"
+      class="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col min-h-[600px] border-8 border-white transition-all duration-500"
+    >
+      <!-- HEADER -->
+      <header class="p-8 text-center bg-white border-b border-rose-50">
+        <h1 class="text-3xl font-serif text-rose-400">Mauro & Larisse</h1>
+        <p
+          class="text-[10px] tracking-[0.4em] text-slate-300 font-bold uppercase mt-2"
+        >
+          28 • Março • 2026
+        </p>
+      </header>
+
+      <!-- CONTEÚDO -->
+      <main class="flex-1 flex flex-col p-6 overflow-y-auto relative">
+        <!-- PASSO 1: BOAS-VINDAS -->
+        <div
+          id="step-welcome"
+          class="step active flex-col items-center text-center py-8 animate-fade-in"
+        >
+          <div
+            class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mb-6"
+          >
+            <svg
+              class="w-10 h-10 text-rose-400 fill-rose-400"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-serif text-slate-800 mb-4 text-center">
+            Mural dos Sonhos
+          </h2>
+          <p class="text-slate-500 mb-10 text-sm">
+            Olá! Registre um momento agora e deixe um recado para o nosso álbum
+            de memórias.
+          </p>
+
+          <button
+            onclick="startCamera()"
+            class="w-full bg-rose-500 text-white py-5 rounded-2xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-600 transition-all flex items-center justify-center gap-2"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+            Tirar Selfie
+          </button>
+
+          <label
+            class="mt-4 text-slate-400 text-sm cursor-pointer hover:text-rose-400"
+          >
+            ou escolher da galeria
+            <input
+              type="file"
+              id="file-input"
+              accept="image/*"
+              class="hidden"
+              onchange="handleFile(event)"
+            />
+          </label>
+        </div>
+
+        <!-- PASSO 2: CÂMERA -->
+        <div
+          id="step-camera"
+          class="step flex-col bg-black rounded-3xl overflow-hidden relative min-h-[400px]"
+        >
+          <video
+            id="video"
+            autoplay
+            playsinline
+            class="w-full h-full object-cover"
+          ></video>
+          <div
+            class="absolute bottom-6 inset-x-0 flex justify-center items-center gap-10"
+          >
+            <button
+              onclick="stopCameraAndReturn()"
+              class="p-3 bg-white/20 rounded-full text-white backdrop-blur-md"
+            >
+              X
+            </button>
+            <button
+              onclick="takePhoto()"
+              class="w-16 h-16 bg-white rounded-full border-4 border-slate-300 shadow-xl active:scale-90 transition-transform"
+            ></button>
+            <div class="w-10"></div>
+          </div>
+        </div>
+
+        <!-- PASSO 3: MENSAGEM -->
+        <div id="step-message" class="step flex-col gap-6">
+          <div
+            class="relative aspect-square rounded-3xl overflow-hidden shadow-lg border-4 border-white"
+          >
+            <img id="preview" src="" class="w-full h-full object-cover" />
+            <div
+              id="resize-loader"
+              class="absolute inset-0 bg-white/80 flex flex-col items-center justify-center hidden"
+            >
+              <div
+                class="spinner !border-rose-400 !border-t-rose-100 mb-2"
+              ></div>
+              <span
+                class="text-[10px] text-rose-500 font-bold uppercase tracking-widest"
+                >Otimizando Foto...</span
+              >
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-xs font-bold text-slate-400 uppercase ml-2 tracking-widest"
+              >Sua Mensagem</label
+            >
+            <textarea
+              id="message-text"
+              class="w-full p-4 bg-slate-50 rounded-2xl border-none ring-1 ring-slate-100 focus:ring-2 focus:ring-rose-400 outline-none h-28 resize-none text-slate-700"
+              placeholder="Escreva algo carinhoso..."
+            ></textarea>
+          </div>
+          <button
+            id="btn-save"
+            onclick="saveData()"
+            class="w-full bg-rose-500 text-white py-5 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 disabled:bg-slate-300"
+          >
+            <span id="btn-text">Enviar para o Mural</span>
+            <div id="btn-loader" class="spinner hidden"></div>
+          </button>
+        </div>
+
+        <!-- PASSO 4: SUCESSO E PIX -->
+        <div
+          id="step-success"
+          class="step flex-col items-center text-center py-8"
+        >
+          <div
+            class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4 text-green-500 font-bold text-2xl shadow-inner border border-green-100"
+          >
+            ✓
+          </div>
+          <h2 class="text-2xl font-serif text-slate-800 mb-2">
+            Recado Enviado!
+          </h2>
+          <p class="text-slate-500 text-sm mb-8 leading-relaxed">
+            Sua foto agora faz parte do nosso mural de sonhos.
+          </p>
+
+          <div class="w-full bg-slate-50 p-6 rounded-3xl border border-rose-50">
+            <p
+              class="text-[10px] uppercase font-bold text-rose-400 mb-2 tracking-widest"
+            >
+              Lua de Mel
+            </p>
+            <p class="text-[11px] text-slate-400 mb-4">
+              Se desejar nos presentear, <br />
+              utilize nossa chave PIX:
+            </p>
+            <div
+              id="pix-value"
+              class="p-3 bg-white rounded-xl border text-[10px] font-mono break-all text-slate-500 mb-4 select-all"
+            >
+              sua-chave-pix@email.com
+            </div>
+            <button
+              onclick="copyPix()"
+              id="btn-pix"
+              class="w-full py-4 bg-slate-800 text-white rounded-2xl font-bold text-sm active:scale-95 transition-all"
+            >
+              Copiar Chave PIX
+            </button>
+          </div>
+          <button
+            onclick="location.reload()"
+            class="mt-8 text-rose-400 text-xs font-semibold hover:underline"
+          >
+            Enviar outro recado
+          </button>
+        </div>
+
+        <!-- PASSO 5: MURAL (ESTILO SCRAPBOOK) -->
+        <div id="step-mural" class="step flex-col gap-6 animate-fade-in">
+          <div class="flex flex-col items-center mb-4">
+            <h2 class="text-3xl font-serif text-slate-700 italic">
+              Mural dos Sonhos
+            </h2>
+            <div class="h-1 w-24 bg-rose-100 rounded-full mt-2"></div>
+          </div>
+
+          <div class="mural-container-bg">
+            <div id="mural-container" class="mural-grid">
+              <div
+                class="col-span-full py-20 text-center text-slate-400 text-sm italic"
+              >
+                Montando o mural...
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button
+              onclick="toggleMuralMode()"
+              class="text-[10px] uppercase font-bold text-slate-400 hover:text-rose-400 transition-colors"
+            >
+              Fechar Mural
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <footer class="p-6 text-center shrink-0">
+        <button
+          id="btn-toggle-mural"
+          onclick="toggleMuralMode()"
+          class="text-[8px] text-slate-400 tracking-[0.3em] uppercase hover:text-rose-400 transition-colors"
+        >
+          Ver o Mural de Recordações
+        </button>
+        <p class="text-[7px] text-slate-200 uppercase mt-2">
+          &copy; 2024 • Wedding Scrapbook Experience
+        </p>
+      </footer>
+    </div>
+
+    <!-- FIREBASE SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        onSnapshot,
+        query,
+        orderBy,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyXXXXXXXXXXXX",
+        authDomain: "wedding-app-87798.firebaseapp.com",
+        projectId: "wedding-app-87798",
+        storageBucket: "wedding-app-87798.appspot.com",
+        messagingSenderId: "1057022710040",
+        appId: "1:1057022710040:web:997c2974fd9861576b4e6d",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      let currentPhoto = null;
+      let isMuralOpen = false;
+      const video = document.getElementById("video");
+
+      window.changeStep = (id) => {
+        document
+          .querySelectorAll(".step")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("step-" + id).classList.add("active");
+      };
+
+      window.toggleMuralMode = () => {
+        const container = document.getElementById("main-container");
+        const btnToggle = document.getElementById("btn-toggle-mural");
+
+        if (!isMuralOpen) {
+          isMuralOpen = true;
+          container.classList.replace("max-w-md", "max-w-5xl");
+          btnToggle.innerText = "Sair do Modo Mural";
+          changeStep("mural");
+          loadMuralData();
+        } else {
+          isMuralOpen = false;
+          container.classList.replace("max-w-5xl", "max-w-md");
+          btnToggle.innerText = "Ver o Mural de Recordações";
+          changeStep("welcome");
+        }
+      };
+
+      const loadMuralData = () => {
+        const muralContainer = document.getElementById("mural-container");
+        const q = query(
+          collection(db, "guestbook"),
+          orderBy("timestamp", "desc"),
+        );
+
+        onSnapshot(q, (snapshot) => {
+          muralContainer.innerHTML = "";
+
+          if (snapshot.empty) {
+            muralContainer.innerHTML =
+              '<div class="col-span-full py-20 text-center text-slate-300 text-sm italic">O mural ainda está vazio. Comece a preenchê-lo!</div>';
+            return;
+          }
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+
+            // Gera uma rotação aleatória para o estilo scrapbook
+            const randomRotate = (Math.random() * 6 - 3).toFixed(1); // entre -3 e 3 graus
+
+            const card = document.createElement("div");
+            card.className = "polaroid animate-fade-in";
+            card.style.transform = `rotate(${randomRotate}deg)`;
+
+            card.innerHTML = `
+                        <div class="tape"></div>
+                        <div class="aspect-square w-full overflow-hidden border border-slate-100">
+                            <img src="${data.photo}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="mt-3 px-1">
+                            <p class="text-[12px] text-slate-700 leading-snug font-medium mb-1 break-words">"${data.message}"</p>
+                            <p class="text-[8px] text-slate-300 font-bold uppercase tracking-widest text-right">
+                                ${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : "Agora"}
+                            </p>
+                        </div>
+                    `;
+            muralContainer.appendChild(card);
+          });
+        });
+      };
+
+      const resizeImage = (base64Str, maxWidth = 800, maxHeight = 800) => {
+        return new Promise((resolve) => {
+          let img = new Image();
+          img.src = base64Str;
+          img.onload = () => {
+            let canvas = document.createElement("canvas");
+            let width = img.width;
+            let height = img.height;
+            if (width > height) {
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+              }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            let ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL("image/jpeg", 0.7));
+          };
+        });
+      };
+
+      window.startCamera = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false,
+          });
+          video.srcObject = stream;
+          changeStep("camera");
+        } catch (e) {
+          alert("Não conseguimos abrir sua câmera. Use o upload da galeria.");
+        }
+      };
+
+      window.stopCameraAndReturn = () => {
+        if (video.srcObject)
+          video.srcObject.getTracks().forEach((t) => t.stop());
+        changeStep("welcome");
+      };
+
+      window.takePhoto = async () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        const rawBase64 = canvas.toDataURL("image/jpeg", 0.9);
+        video.srcObject.getTracks().forEach((t) => t.stop());
+        changeStep("message");
+        document.getElementById("resize-loader").classList.remove("hidden");
+        currentPhoto = await resizeImage(rawBase64);
+        document.getElementById("preview").src = currentPhoto;
+        document.getElementById("resize-loader").classList.add("hidden");
+      };
+
+      window.handleFile = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+          const rawBase64 = ev.target.result;
+          changeStep("message");
+          document.getElementById("resize-loader").classList.remove("hidden");
+          currentPhoto = await resizeImage(rawBase64);
+          document.getElementById("preview").src = currentPhoto;
+          document.getElementById("resize-loader").classList.add("hidden");
+        };
+        reader.readAsDataURL(file);
+      };
+
+      window.saveData = async () => {
+        const message = document.getElementById("message-text").value.trim();
+        if (!message) return alert("Por favor, escreva uma mensagem!");
+        const btn = document.getElementById("btn-save");
+        const btnText = document.getElementById("btn-text");
+        const btnLoader = document.getElementById("btn-loader");
+        btn.disabled = true;
+        btnText.classList.add("hidden");
+        btnLoader.classList.remove("hidden");
+        try {
+          await addDoc(collection(db, "guestbook"), {
+            photo: currentPhoto,
+            message: message,
+            timestamp: serverTimestamp(),
+          });
+          changeStep("success");
+        } catch (e) {
+          alert("Erro ao enviar. Tente novamente.");
+          btn.disabled = false;
+          btnText.classList.remove("hidden");
+          btnLoader.classList.add("hidden");
+        }
+      };
+
+      window.copyPix = () => {
+        const pix = document.getElementById("pix-value").innerText;
+        navigator.clipboard.writeText(pix);
+        const btn = document.getElementById("btn-pix");
+        btn.innerText = "Copiado!";
+        btn.classList.replace("bg-slate-800", "bg-green-600");
+        setTimeout(() => {
+          btn.innerText = "Copiar Chave PIX";
+          btn.classList.replace("bg-green-600", "bg-slate-800");
+        }, 3000);
+      };
+    </script>
+  </body>
+</html>
