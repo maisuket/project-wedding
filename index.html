@@ -12,7 +12,10 @@
     <style>
       body {
         font-family: "Inter", sans-serif;
-        background-color: #fffafb;
+        background-color: #f7faf7;
+        position: relative;
+        overflow-x: hidden;
+        color: #2d4a3e; /* Verde escuro para o texto base */
       }
       .font-serif {
         font-family: "Italiana", serif;
@@ -27,11 +30,49 @@
         display: flex;
       }
 
+      /* ILUSTRAÇÃO DE FUNDO (MARCA D'ÁGUA) */
+      .bg-illustration {
+        position: fixed;
+        bottom: -20px;
+        right: -20px;
+        width: 70%;
+        max-width: 500px;
+        height: 70%;
+        background-image: url("image.png");
+        background-repeat: no-repeat;
+        background-position: bottom right;
+        background-size: contain;
+        opacity: 0.12;
+        pointer-events: none;
+        z-index: -1;
+        filter: grayscale(100%) sepia(20%) hue-rotate(80deg); /* Tom esverdeado sutil */
+      }
+
+      /* FLORES DECORATIVAS NAS QUINAS */
+      .flower-corner {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0.8;
+      }
+      .flower-top-left {
+        top: -10px;
+        left: -10px;
+        transform: rotate(0deg);
+      }
+      .flower-bottom-right {
+        bottom: -10px;
+        right: -10px;
+        transform: rotate(180deg);
+      }
+
       /* Loading spinner */
       .spinner {
-        border: 3px solid rgba(255, 255, 255, 0.3);
+        border: 3px solid rgba(52, 211, 153, 0.3);
         border-radius: 50%;
-        border-top: 3px solid #fff;
+        border-top: 3px solid #10b981;
         width: 24px;
         height: 24px;
         animation: spin 1s linear infinite;
@@ -48,82 +89,140 @@
       /* Estilo Scrapbook para o Mural */
       .mural-container-bg {
         background-image:
-          radial-gradient(#f1f1f1 1px, transparent 1px),
-          linear-gradient(to right, #f9f9f9 1px, transparent 1px),
-          linear-gradient(to bottom, #f9f9f9 1px, transparent 1px);
+          radial-gradient(#e2eee2 1px, transparent 1px),
+          linear-gradient(to right, #f4f9f4 1px, transparent 1px),
+          linear-gradient(to bottom, #f4f9f4 1px, transparent 1px);
         background-size: 20px 20px;
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.4);
         border-radius: 2rem;
-        padding: 2rem;
+        padding: 1.5rem;
         min-height: 400px;
+        position: relative;
       }
 
       .polaroid {
-        background: white;
-        padding: 10px 10px 30px 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(4px);
+        padding: 8px 8px 24px 8px;
+        box-shadow: 0 4px 12px rgba(45, 74, 62, 0.1);
         position: relative;
         transition: transform 0.3s ease;
-        max-width: 220px;
-        margin: 15px auto;
+        max-width: 180px;
+        margin: 10px auto;
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
 
       .polaroid:hover {
         transform: scale(1.05) rotate(0deg) !important;
         z-index: 50;
+        background: rgba(255, 255, 255, 1);
       }
 
-      /* Efeito de Fita Adesiva */
       .tape {
         position: absolute;
-        top: -15px;
+        top: -12px;
         left: 50%;
         transform: translateX(-50%) rotate(-2deg);
-        width: 80px;
-        height: 25px;
-        background-color: rgba(243, 225, 171, 0.6);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        z-index: 10;
+        width: 60px;
+        height: 20px;
+        background-color: rgba(167, 243, 208, 0.4); /* Fita verde clara */
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        z-index: 11;
       }
 
       .mural-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.5rem;
         align-items: start;
+        position: relative;
+        z-index: 5;
+      }
+
+      /* Ajuste de transparência do container principal */
+      #main-container {
+        background-color: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(12px);
+        border-color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* Cores de fonte verde */
+      .text-wedding-green {
+        color: #2d6a4f;
+      }
+      .bg-wedding-green {
+        background-color: #40916c;
+      }
+      .bg-wedding-green:hover {
+        background-color: #2d6a4f;
       }
     </style>
   </head>
   <body
     class="flex justify-center min-h-screen items-start sm:items-center p-4"
   >
+    <!-- CAMADA DE ILUSTRAÇÃO FIXA -->
+    <div class="bg-illustration"></div>
+
     <!-- CONTAINER PRINCIPAL -->
     <div
       id="main-container"
-      class="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col min-h-[600px] border-8 border-white transition-all duration-500"
+      class="w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col min-h-[600px] border-8 transition-all duration-500 relative"
     >
+      <!-- FLORES NAS QUINAS DO CARTÃO -->
+      <div class="flower-corner flower-top-left">
+        <svg
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-full h-full text-emerald-800/20 fill-current"
+        >
+          <path
+            d="M10 10C30 10 40 30 40 50C40 70 30 90 10 90C10 70 20 60 40 50C20 40 10 30 10 10Z"
+          />
+          <circle cx="45" cy="45" r="10" />
+          <path
+            d="M50 10C70 10 80 30 80 50C80 70 70 90 50 90C50 70 60 60 80 50C60 40 50 30 50 10Z"
+          />
+        </svg>
+      </div>
+      <div class="flower-corner flower-bottom-right">
+        <svg
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-full h-full text-emerald-800/20 fill-current"
+        >
+          <path
+            d="M10 10C30 10 40 30 40 50C40 70 30 90 10 90C10 70 20 60 40 50C20 40 10 30 10 10Z"
+          />
+          <circle cx="45" cy="45" r="10" />
+        </svg>
+      </div>
+
       <!-- HEADER -->
-      <header class="p-8 text-center bg-white border-b border-rose-50">
-        <h1 class="text-3xl font-serif text-rose-400">Mauro & Larisse</h1>
+      <header class="p-8 text-center bg-white/40 border-b border-emerald-100">
+        <h1 class="text-3xl font-serif text-wedding-green">Mauro & Larisse</h1>
         <p
-          class="text-[10px] tracking-[0.4em] text-slate-300 font-bold uppercase mt-2"
+          class="text-[10px] tracking-[0.4em] text-emerald-800/60 font-bold uppercase mt-2"
         >
           28 • Março • 2026
         </p>
       </header>
 
       <!-- CONTEÚDO -->
-      <main class="flex-1 flex flex-col p-6 overflow-y-auto relative">
+      <main class="flex-1 flex flex-col p-6 overflow-y-auto relative z-10">
         <!-- PASSO 1: BOAS-VINDAS -->
         <div
           id="step-welcome"
           class="step active flex-col items-center text-center py-8 animate-fade-in"
         >
           <div
-            class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mb-6"
+            class="w-20 h-20 bg-emerald-50/50 rounded-full flex items-center justify-center mb-6 border border-emerald-100"
           >
             <svg
-              class="w-10 h-10 text-rose-400 fill-rose-400"
+              class="w-10 h-10 text-emerald-600 fill-emerald-600"
               viewBox="0 0 24 24"
             >
               <path
@@ -131,17 +230,17 @@
               />
             </svg>
           </div>
-          <h2 class="text-2xl font-serif text-slate-800 mb-4 text-center">
+          <h2 class="text-2xl font-serif text-wedding-green mb-4 text-center">
             Mural dos Sonhos
           </h2>
-          <p class="text-slate-500 mb-10 text-sm">
+          <p class="text-emerald-900/70 mb-10 text-sm">
             Olá! Registre um momento agora e deixe um recado para o nosso álbum
             de memórias.
           </p>
 
           <button
             onclick="startCamera()"
-            class="w-full bg-rose-500 text-white py-5 rounded-2xl font-bold shadow-lg shadow-rose-100 hover:bg-rose-600 transition-all flex items-center justify-center gap-2"
+            class="w-full bg-wedding-green text-white py-5 rounded-2xl font-bold shadow-lg shadow-emerald-200/50 transition-all flex items-center justify-center gap-2"
           >
             <svg
               class="w-6 h-6"
@@ -166,7 +265,7 @@
           </button>
 
           <label
-            class="mt-4 text-slate-400 text-sm cursor-pointer hover:text-rose-400"
+            class="mt-4 text-emerald-600/60 text-sm cursor-pointer hover:text-wedding-green"
           >
             ou escolher da galeria
             <input
@@ -217,30 +316,28 @@
               id="resize-loader"
               class="absolute inset-0 bg-white/80 flex flex-col items-center justify-center hidden"
             >
-              <div
-                class="spinner !border-rose-400 !border-t-rose-100 mb-2"
-              ></div>
+              <div class="spinner mb-2"></div>
               <span
-                class="text-[10px] text-rose-500 font-bold uppercase tracking-widest"
+                class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest"
                 >Otimizando Foto...</span
               >
             </div>
           </div>
           <div class="space-y-2">
             <label
-              class="text-xs font-bold text-slate-400 uppercase ml-2 tracking-widest"
+              class="text-xs font-bold text-emerald-800/40 uppercase ml-2 tracking-widest"
               >Sua Mensagem</label
             >
             <textarea
               id="message-text"
-              class="w-full p-4 bg-slate-50 rounded-2xl border-none ring-1 ring-slate-100 focus:ring-2 focus:ring-rose-400 outline-none h-28 resize-none text-slate-700"
+              class="w-full p-4 bg-white/50 rounded-2xl border-none ring-1 ring-emerald-100 focus:ring-2 focus:ring-emerald-400 outline-none h-28 resize-none text-emerald-900"
               placeholder="Escreva algo carinhoso..."
             ></textarea>
           </div>
           <button
             id="btn-save"
             onclick="saveData()"
-            class="w-full bg-rose-500 text-white py-5 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 disabled:bg-slate-300"
+            class="w-full bg-wedding-green text-white py-5 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 disabled:bg-slate-300"
           >
             <span id="btn-text">Enviar para o Mural</span>
             <div id="btn-loader" class="spinner hidden"></div>
@@ -253,44 +350,48 @@
           class="step flex-col items-center text-center py-8"
         >
           <div
-            class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4 text-green-500 font-bold text-2xl shadow-inner border border-green-100"
+            class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-4 text-emerald-500 font-bold text-2xl shadow-inner border border-emerald-100"
           >
             ✓
           </div>
-          <h2 class="text-2xl font-serif text-slate-800 mb-2">
+          <h2
+            class="text-2xl font-serif text-wedding-green mb-2 tracking-tight"
+          >
             Recado Enviado!
           </h2>
-          <p class="text-slate-500 text-sm mb-8 leading-relaxed">
+          <p class="text-emerald-900/60 text-sm mb-8 leading-relaxed">
             Sua foto agora faz parte do nosso mural de sonhos.
           </p>
 
-          <div class="w-full bg-slate-50 p-6 rounded-3xl border border-rose-50">
+          <div
+            class="w-full bg-white/40 backdrop-blur-md p-6 rounded-3xl border border-emerald-50"
+          >
             <p
-              class="text-[10px] uppercase font-bold text-rose-400 mb-2 tracking-widest"
+              class="text-[10px] uppercase font-bold text-emerald-600 mb-2 tracking-widest"
             >
               Lua de Mel
             </p>
-            <p class="text-[11px] text-slate-400 mb-4">
+            <p class="text-[11px] text-emerald-900/70 mb-4 text-center">
               Se desejar nos presentear, <br />
               utilize nossa chave PIX:
             </p>
             <div
               id="pix-value"
-              class="p-3 bg-white rounded-xl border text-[10px] font-mono break-all text-slate-500 mb-4 select-all"
+              class="p-3 bg-white/80 rounded-xl border border-emerald-50 text-[10px] font-mono break-all text-emerald-800 mb-4 select-all text-center"
             >
-              d6c82cd3-189c-4a2c-a4d6-072cd2f53868
+              00101402201
             </div>
             <button
               onclick="copyPix()"
               id="btn-pix"
-              class="w-full py-4 bg-slate-800 text-white rounded-2xl font-bold text-sm active:scale-95 transition-all"
+              class="w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold text-sm active:scale-95 transition-all"
             >
               Copiar Chave PIX
             </button>
           </div>
           <button
             onclick="location.reload()"
-            class="mt-8 text-rose-400 text-xs font-semibold hover:underline"
+            class="mt-8 text-emerald-600 text-xs font-semibold hover:underline uppercase tracking-widest"
           >
             Enviar outro recado
           </button>
@@ -299,16 +400,18 @@
         <!-- PASSO 5: MURAL (ESTILO SCRAPBOOK) -->
         <div id="step-mural" class="step flex-col gap-6 animate-fade-in">
           <div class="flex flex-col items-center mb-4">
-            <h2 class="text-3xl font-serif text-slate-700 italic">
+            <h2
+              class="text-3xl font-serif text-wedding-green italic text-center"
+            >
               Mural dos Sonhos
             </h2>
-            <div class="h-1 w-24 bg-rose-100 rounded-full mt-2"></div>
+            <div class="h-1 w-24 bg-emerald-100 rounded-full mt-2"></div>
           </div>
 
           <div class="mural-container-bg">
             <div id="mural-container" class="mural-grid">
               <div
-                class="col-span-full py-20 text-center text-slate-400 text-sm italic"
+                class="col-span-full py-20 text-center text-emerald-400 text-sm italic"
               >
                 Montando o mural...
               </div>
@@ -318,7 +421,7 @@
           <div class="text-center">
             <button
               onclick="toggleMuralMode()"
-              class="text-[10px] uppercase font-bold text-slate-400 hover:text-rose-400 transition-colors"
+              class="text-[10px] uppercase font-bold text-emerald-400 hover:text-emerald-700 transition-colors tracking-[0.2em]"
             >
               Fechar Mural
             </button>
@@ -326,15 +429,15 @@
         </div>
       </main>
 
-      <footer class="p-6 text-center shrink-0">
+      <footer class="p-6 text-center shrink-0 relative z-10">
         <button
           id="btn-toggle-mural"
           onclick="toggleMuralMode()"
-          class="text-[8px] text-slate-400 tracking-[0.3em] uppercase hover:text-rose-400 transition-colors"
+          class="text-[13px] text-emerald-800/40 tracking-[0.3em] capitalize hover:text-wedding-green transition-colors"
         >
-          Ver o Mural de Recordações
+          Álbum de memórias
         </button>
-        <p class="text-[7px] text-slate-200 uppercase mt-2">
+        <p class="text-[7px] text-emerald-800/20 uppercase mt-2">
           &copy; 2024 • Wedding Scrapbook Experience
         </p>
       </footer>
@@ -379,16 +482,19 @@
       window.toggleMuralMode = () => {
         const container = document.getElementById("main-container");
         const btnToggle = document.getElementById("btn-toggle-mural");
+        const body = document.body;
 
         if (!isMuralOpen) {
           isMuralOpen = true;
           container.classList.replace("max-w-md", "max-w-5xl");
+          body.classList.add("mural-active");
           btnToggle.innerText = "Sair do Modo Mural";
           changeStep("mural");
           loadMuralData();
         } else {
           isMuralOpen = false;
           container.classList.replace("max-w-5xl", "max-w-md");
+          body.classList.remove("mural-active");
           btnToggle.innerText = "Ver o Mural de Recordações";
           changeStep("welcome");
         }
@@ -406,15 +512,13 @@
 
           if (snapshot.empty) {
             muralContainer.innerHTML =
-              '<div class="col-span-full py-20 text-center text-slate-300 text-sm italic">O mural ainda está vazio. Comece a preenchê-lo!</div>';
+              '<div class="col-span-full py-20 text-center text-emerald-300 text-sm italic">O mural ainda está vazio. Comece a preenchê-lo!</div>';
             return;
           }
 
           snapshot.forEach((doc) => {
             const data = doc.data();
-
-            // Gera uma rotação aleatória para o estilo scrapbook
-            const randomRotate = (Math.random() * 6 - 3).toFixed(1); // entre -3 e 3 graus
+            const randomRotate = (Math.random() * 6 - 3).toFixed(1);
 
             const card = document.createElement("div");
             card.className = "polaroid animate-fade-in";
@@ -422,12 +526,12 @@
 
             card.innerHTML = `
                         <div class="tape"></div>
-                        <div class="aspect-square w-full overflow-hidden border border-slate-100">
+                        <div class="aspect-square w-full overflow-hidden border border-emerald-50">
                             <img src="${data.photo}" class="w-full h-full object-cover">
                         </div>
                         <div class="mt-3 px-1">
-                            <p class="text-[12px] text-slate-700 leading-snug font-medium mb-1 break-words">"${data.message}"</p>
-                            <p class="text-[8px] text-slate-300 font-bold uppercase tracking-widest text-right">
+                            <p class="text-[12px] text-emerald-900 leading-snug font-medium mb-1 break-words italic">"${data.message}"</p>
+                            <p class="text-[8px] text-emerald-300 font-bold uppercase tracking-widest text-right mt-2">
                                 ${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : "Agora"}
                             </p>
                         </div>
@@ -529,6 +633,9 @@
             timestamp: serverTimestamp(),
           });
           changeStep("success");
+          btn.disabled = false;
+          btnText.classList.remove("hidden");
+          btnLoader.classList.add("hidden");
         } catch (e) {
           alert("Erro ao enviar. Tente novamente.");
           btn.disabled = false;
