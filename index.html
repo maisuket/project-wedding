@@ -30,15 +30,20 @@
         display: flex;
       }
 
+      /* CÂMERA NÃO ESPELHADA */
+      #video {
+        transform: scaleX(-1) !important; /* Garante que não esteja espelhado */
+      }
+
       /* ILUSTRAÇÃO DENTRO DO CARD */
       .bg-illustration {
         position: absolute;
         bottom: 0;
         right: 0;
-        width: 70%;
+        width: 80%;
         max-width: 400px;
         height: 60%;
-        background-image: url("image.png");
+        background-image: url("image_80929d.jpg");
         background-repeat: no-repeat;
         background-position: bottom right;
         background-size: contain;
@@ -361,12 +366,6 @@
 
     <!-- FRUFRU EXTERNO: BORBOLETAS -->
     <div class="butterfly" style="top: 15%; left: 10%; animation-delay: 0s">
-      <svg viewBox="0 0 24 24" fill="currentColor" class="text-emerald-800/30">
-        <path
-          d="M12 21c-.4 0-.8-.2-1.1-.5C9 18.5 4 14.5 4 8.5 4 5.4 6.4 3 9.5 3c1.7 0 3.3.8 4.5 2.1C15.2 3.8 16.8 3 18.5 3 21.6 3 24 5.4 24 8.5c0 6-5 10-6.9 12-.3.3-.7.5-1.1.5h-4zM9.5 5C7.6 5 6 6.6 6 8.5c0 4.2 3.6 7.5 6 9.8 2.4-2.3 6-5.6 6-9.8 0-1.9-1.6-3.5-3.5-3.5-1.4 0-2.7.9-3.2 2.2-.2.4-.6.7-1 .7s-.8-.3-1-.7c-.5-1.3-1.8-2.2-3.3-2.2z"
-          opacity="0"
-        />
-      </svg>
       <svg
         viewBox="0 0 100 100"
         fill="currentColor"
@@ -561,6 +560,17 @@
               >
             </div>
           </div>
+
+          <!-- BOTÃO PARA REFAZER FOTO -->
+          <div class="flex justify-center -mt-4">
+            <button
+              onclick="startCamera()"
+              class="text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100 hover:bg-emerald-100 transition-colors"
+            >
+              ↺ Tirar outra foto
+            </button>
+          </div>
+
           <div class="space-y-2">
             <label
               class="text-xs font-bold text-emerald-800/40 uppercase ml-2 tracking-widest font-serif"
@@ -694,6 +704,7 @@
         serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+      // MANTENHA SUAS CONFIGURAÇÕES AQUI
       const firebaseConfig = {
         apiKey: "AIzaSyXXXXXXXXXXXX",
         authDomain: "wedding-app-87798.firebaseapp.com",
@@ -820,6 +831,11 @@
 
       window.startCamera = async () => {
         try {
+          // Se o vídeo já estiver rodando (caso de refazer foto), paramos o anterior
+          if (video.srcObject) {
+            video.srcObject.getTracks().forEach((t) => t.stop());
+          }
+
           const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: "user" },
             audio: false,
@@ -843,7 +859,10 @@
         canvas.height = video.videoHeight;
         canvas.getContext("2d").drawImage(video, 0, 0);
         const rawBase64 = canvas.toDataURL("image/jpeg", 0.9);
+
+        // Parar a câmera assim que tirar a foto
         video.srcObject.getTracks().forEach((t) => t.stop());
+
         changeStep("message");
         document.getElementById("resize-loader").classList.remove("hidden");
         currentPhoto = await resizeImage(rawBase64);
@@ -869,12 +888,15 @@
       window.saveData = async () => {
         const message = document.getElementById("message-text").value.trim();
         if (!message) return alert("Por favor, escreva uma mensagem!");
+
         const btn = document.getElementById("btn-save");
         const btnText = document.getElementById("btn-text");
         const btnLoader = document.getElementById("btn-loader");
+
         btn.disabled = true;
         btnText.classList.add("hidden");
         btnLoader.classList.remove("hidden");
+
         try {
           await addDoc(collection(db, "guestbook"), {
             photo: currentPhoto,
@@ -882,9 +904,7 @@
             timestamp: serverTimestamp(),
           });
           changeStep("success");
-          btn.disabled = false;
-          btnText.classList.remove("hidden");
-          btnLoader.classList.add("hidden");
+          // Não resetamos o botão aqui pois mudamos de tela (step-success)
         } catch (e) {
           alert("Erro ao enviar. Tente novamente.");
           btn.disabled = false;
